@@ -1,11 +1,13 @@
 from typing import Any, Union
 
-from vanna.chromadb import ChromaDB_VectorStore
-from vanna.ollama import Ollama
+from vanna.remote import VannaDefault
 
 from core.tools.entities.tool_entities import ToolInvokeMessage
 from core.tools.errors import ToolProviderCredentialValidationError
 from core.tools.tool.builtin_tool import BuiltinTool
+from vanna.ollama import Ollama
+from vanna.chromadb import ChromaDB_VectorStore
+
 
 
 class VannaTool(BuiltinTool):
@@ -42,8 +44,9 @@ class VannaTool(BuiltinTool):
         port = tool_parameters.get("port", 0)
 
        # vn = VannaDefault(model=model, api_key=api_key)
-        config = {'model': 'qwen2:7b-instruct-fp16', 'ollama_host': 'http://129.154.199.90:11434'}
+        config = {'model': 'qwen2:7b-instruct-fp16', 'ollama_host': 'http://129.154.199.90:11434','path': '/home/opc/project/dify/docker/volumes/app/chromadb'}
         vn = VannaTool.MyVanna(config=config)
+        
 
 
         db_type = tool_parameters.get("db_type", "")
@@ -71,7 +74,7 @@ class VannaTool(BuiltinTool):
                 #vn.connect_to_mysql(host='150.136.236.107', dbname='test', user='dify', password='dify', port=3306)
             case "Oracle":
                 vn.connect_to_oracle(user=username, password=password, dsn=url)
-                #vn.connect_to_oracle(user='C##dify', password='dify', dsn='150.136.236.107:1521/ORCL')
+                #vn.connect_to_oracle(user='C##dify', password='dify', dsn='150.136.236.107:1521/free')
             case "Hive":
                 vn.connect_to_hive(host=url, dbname=db_name, user=username, password=password, port=port)
             case "ClickHouse":
@@ -122,8 +125,8 @@ class VannaTool(BuiltinTool):
         # with "visualize" set to True (default behavior) leads to remote code execution.
         # Affected versions: <= 0.5.5
         #########################################################################################
-        generate_chart = False
-        # generate_chart = tool_parameters.get("generate_chart", True)
+        generate_chart = True
+        generate_chart = tool_parameters.get("generate_chart", True)
         res = vn.ask(prompt, False, True, generate_chart)
 
         result = []
