@@ -218,6 +218,40 @@ class OracleVector(BaseVector):
                             current_entity = ""
                 if current_entity:
                     entities.append(current_entity)
+
+                # 使用jieba进行分词和词性标注
+                words = pseg.lcut(query)
+                # 定义需要过滤掉的词性
+                stop_pos = {
+                    'x',  # 标点符号
+                    'r',  # 代词
+                    'm',  # 数词
+                    'p',  # 介词
+                    'q',  # 量词
+                    'd',  # 副词
+                    'u',  # 助词
+                    'c',  # 连词
+                    'uj',  # 助词
+                    'ul',  # 助词
+                    'e',  # 叹词
+                    'y',  # 语气词
+                    'o',  # 拟声词
+                    'h',  # 前缀
+                    'k',  # 后缀
+                    'w'  # 其他
+                }
+                # 过滤掉指定词性的词
+                filtered_words = [(word, pos) for word, pos in words if pos not in stop_pos]
+                # 提取包含字母、数字和特殊字符的专有术语
+                pattern = re.compile(r'[A-Za-z0-9\.\-]+')
+                special_terms = [(match.group(), 'eng') for match in pattern.finditer(query)]
+                # 合并过滤结果和专有术语
+                final_words = filtered_words + special_terms
+                # 去重
+                final_words = list(set(final_words))
+                for word, pos in final_words:
+                    entities.append(word)
+                entities = list(set(entities))
             else:
                 try:
                     nltk.data.find('tokenizers/punkt')
