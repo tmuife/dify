@@ -196,6 +196,7 @@ vanna = { version = "0.5.5", extras = ["postgres", "mysql", "clickhouse", "duckd
 wikipedia = "1.4.0"
 yfinance = "~0.2.40"
 cloudscraper = "1.2.71"
+ollama = "~0.3.0"
 
 ############################################################
 # VDB dependencies required by vector store clients

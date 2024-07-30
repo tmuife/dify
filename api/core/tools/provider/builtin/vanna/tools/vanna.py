@@ -1,6 +1,7 @@
 from typing import Any, Union
 
-from vanna.remote import VannaDefault
+from vanna.chromadb import ChromaDB_VectorStore
+from vanna.ollama import Ollama
 
 from core.tools.entities.tool_entities import ToolInvokeMessage
 from core.tools.errors import ToolProviderCredentialValidationError
@@ -8,6 +9,11 @@ from core.tools.tool.builtin_tool import BuiltinTool
 
 
 class VannaTool(BuiltinTool):
+    class MyVanna(ChromaDB_VectorStore, Ollama):
+        def __init__(self, config=None):
+            ChromaDB_VectorStore.__init__(self, config=config)
+            Ollama.__init__(self, config=config)
+
     def _invoke(
         self, user_id: str, tool_parameters: dict[str, Any]
     ) -> Union[ToolInvokeMessage, list[ToolInvokeMessage]]:
@@ -35,7 +41,10 @@ class VannaTool(BuiltinTool):
         password = tool_parameters.get("password", "")
         port = tool_parameters.get("port", 0)
 
-        vn = VannaDefault(model=model, api_key=api_key)
+       # vn = VannaDefault(model=model, api_key=api_key)
+        config = {'model': 'qwen2:7b-instruct-fp16', 'ollama_host': 'http://129.154.199.90:11434'}
+        vn = VannaTool.MyVanna(config=config)
+
 
         db_type = tool_parameters.get("db_type", "")
         if db_type in ["Postgres", "MySQL", "Hive", "ClickHouse"]:
@@ -59,8 +68,10 @@ class VannaTool(BuiltinTool):
                 vn.connect_to_mssql(url)
             case "MySQL":
                 vn.connect_to_mysql(host=url, dbname=db_name, user=username, password=password, port=port)
+                #vn.connect_to_mysql(host='150.136.236.107', dbname='test', user='dify', password='dify', port=3306)
             case "Oracle":
                 vn.connect_to_oracle(user=username, password=password, dsn=url)
+                #vn.connect_to_oracle(user='C##dify', password='dify', dsn='150.136.236.107:1521/ORCL')
             case "Hive":
                 vn.connect_to_hive(host=url, dbname=db_name, user=username, password=password, port=port)
             case "ClickHouse":
