@@ -1,13 +1,11 @@
 from typing import Any, Union
 
-from vanna.remote import VannaDefault
+from vanna.chromadb import ChromaDB_VectorStore
+from vanna.ollama import Ollama
 
 from core.tools.entities.tool_entities import ToolInvokeMessage
 from core.tools.errors import ToolProviderCredentialValidationError
 from core.tools.tool.builtin_tool import BuiltinTool
-from vanna.ollama import Ollama
-from vanna.chromadb import ChromaDB_VectorStore
-
 
 
 class VannaTool(BuiltinTool):
