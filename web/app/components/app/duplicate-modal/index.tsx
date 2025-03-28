@@ -6,9 +6,7 @@ import AppIconPicker from '../../base/app-icon-picker'
 import cn from '@/utils/classnames'
 import Modal from '@/app/components/base/modal'
 import Button from '@/app/components/base/button'
-import Input from '@/app/components/base/input'
 import Toast from '@/app/components/base/toast'
-import AppIcon from '@/app/components/base/app-icon'
 import { useProviderContext } from '@/context/provider-context'
 import AppsFull from '@/app/components/billing/apps-full-in-dialog'
 import type { AppIconType } from '@/types/app'
@@ -79,23 +77,7 @@ const DuplicateAppModal = ({
         </div>
         <div className='relative mb-9 mt-3 text-xl font-semibold leading-[30px] text-text-primary'>{t('app.duplicateTitle')}</div>
         <div className='system-sm-regular mb-9 text-text-secondary'>
-          <div className='system-md-medium mb-2'>{t('explore.appCustomize.subTitle')}</div>
-          <div className='flex items-center justify-between space-x-2'>
-            <AppIcon
-              size='large'
-              onClick={() => { setShowAppIconPicker(true) }}
-              className='cursor-pointer'
-              iconType={appIcon.type}
-              icon={appIcon.type === 'image' ? appIcon.fileId : appIcon.icon}
-              background={appIcon.type === 'image' ? undefined : appIcon.background}
-              imageUrl={appIcon.type === 'image' ? appIcon.url : undefined}
-            />
-            <Input
-              value={name}
-              onChange={e => setName(e.target.value)}
-              className='h-10'
-            />
-          </div>
+
           {isAppsFull && <AppsFull loc='app-duplicate-create' />}
         </div>
         <div className='flex flex-row-reverse'>
