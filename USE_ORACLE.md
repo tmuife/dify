@@ -51,7 +51,7 @@ and also we have a pem key file <oci_api_key.pem>
 
 We organize the api key information like this:
 
-user/fingerprint/tenancy/region/compartment_id
+<p style="color:blue; font-size:16px;">user/fingerprint/tenancy/region/compartment_id</p>
 
 For me:
 
